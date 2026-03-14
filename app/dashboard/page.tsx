@@ -4,11 +4,23 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ProfileCard from "@/components/ProfileCard";
+import RepoStatsCards from "@/components/RepoStats";
+import LanguageChart from "@/components/LanguageChart";
+import RepoHealthTable from "@/components/RepoHealthTable";
+import ActivityChart from "@/components/ActivityChart";
+import DeveloperDNAComponent from "@/components/DeveloperDNA";
 import { GitHubUser, GitHubRepo } from "@/lib/github";
+import { RepoStats, LanguageStat } from "@/lib/analytics";
+import { RepoHealth } from "@/lib/scoring";
+import { ActivityTimelinePoint } from "@/lib/activity";
 
 interface DashboardData {
   user: GitHubUser;
   repos: GitHubRepo[];
+  stats: RepoStats;
+  languages: LanguageStat[];
+  healthScores: RepoHealth[];
+  activity: ActivityTimelinePoint[];
 }
 
 export default function DashboardPage() {
@@ -60,31 +72,29 @@ export default function DashboardPage() {
           <div className="skeleton w-32 h-5" />
           <div className="skeleton w-24 h-5" />
         </header>
-        <main className="max-w-7xl mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1">
-              <div className="glass-card p-6 space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="skeleton w-24 h-24 rounded-full" />
-                  <div className="flex-1 space-y-2">
-                    <div className="skeleton w-40 h-5" />
-                    <div className="skeleton w-24 h-4" />
-                    <div className="skeleton w-full h-3" />
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-3 pt-4 border-t border-border">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="text-center space-y-1">
-                      <div className="skeleton w-12 h-6 mx-auto" />
-                      <div className="skeleton w-16 h-3 mx-auto" />
-                    </div>
-                  ))}
-                </div>
-              </div>
+        <main className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col gap-8">
+            {/* Profile banner skeleton */}
+            <div className="glass-card p-6 h-48 animate-pulse skeleton" />
+            
+            {/* KPI skeleton */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="skeleton h-32 rounded-xl" />
+              <div className="skeleton h-32 rounded-xl" />
+              <div className="skeleton h-32 rounded-xl" />
+              <div className="skeleton h-32 rounded-xl" />
             </div>
-            <div className="lg:col-span-2 space-y-6">
-              <div className="skeleton w-full h-48 rounded-2xl" />
-              <div className="skeleton w-full h-48 rounded-2xl" />
+
+            {/* Charts Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="skeleton h-[320px] rounded-xl" />
+              <div className="skeleton h-[320px] rounded-xl" />
+            </div>
+            
+            {/* Bottom Skeleton */}
+            <div className="flex flex-col gap-8 w-full mt-2">
+               <div className="skeleton h-48 rounded-xl w-full" />
+               <div className="skeleton h-[400px] rounded-xl w-full" />
             </div>
           </div>
         </main>
@@ -116,62 +126,37 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen grid-bg">
-      {/* Header */}
-      <header className="border-b border-border px-6 py-4 flex items-center justify-between sticky top-0 bg-background/80 backdrop-blur-md z-50">
-        <div className="flex items-center gap-3">
-          <h1 className="text-sm font-bold">
-            <span className="gradient-text">GitHub Intelligence</span>
-          </h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-muted-foreground">
-            {session?.user?.name || data.user.login}
-          </span>
-          {session?.user?.image && (
-            <img
-              src={session.user.image}
-              alt="avatar"
-              className="w-7 h-7 rounded-full ring-1 ring-border"
-            />
-          )}
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            className="text-xs text-muted hover:text-foreground transition-colors px-3 py-1.5 rounded-lg border border-border hover:border-border-hover"
-          >
-            Logout
-          </button>
-        </div>
-      </header>
-
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left column — Profile */}
-          <div className="lg:col-span-1">
-            <ProfileCard user={data.user} />
+      <main className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col gap-8">
+          
+          {/* Top Banner: Profile */}
+          <ProfileCard user={data.user} />
+          
+          {/* Phase 3: Repo Stats Cards */}
+          <RepoStatsCards stats={data.stats} />
+
+          {/* Two Column Grid for Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Phase 4: Activity Area Chart */}
+            <ActivityChart data={data.activity} />
+            
+            {/* Phase 3: Language Distribution */}
+            <LanguageChart data={data.languages} />
           </div>
 
-          {/* Right column — Analytics (placeholder for Phase 3+) */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="glass-card p-8 text-center animate-fade-in animate-fade-in-delay-1">
-              <p className="text-2xl mb-2">📊</p>
-              <h3 className="text-base font-semibold text-foreground mb-1">
-                Repository Analytics
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Stats and charts coming in Phase 3
-              </p>
-            </div>
-            <div className="glass-card p-8 text-center animate-fade-in animate-fade-in-delay-2">
-              <p className="text-2xl mb-2">📈</p>
-              <h3 className="text-base font-semibold text-foreground mb-1">
-                Activity & Health Scores
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Charts and tables coming in Phase 4
-              </p>
-            </div>
+          {/* AI Insights Banner */}
+          <div className="w-full">
+            {/* Phase 5: AI Insights */}
+            <DeveloperDNAComponent />
           </div>
+
+          {/* Bottom Full Width Section */}
+          <div className="w-full mt-2">
+            {/* Phase 4: Repository Health Table */}
+            <RepoHealthTable data={data.healthScores} />
+          </div>
+
         </div>
       </main>
     </div>

@@ -20,6 +20,9 @@ export interface GitHubRepo {
   id: number;
   name: string;
   full_name: string;
+  owner: {
+    login: string;
+  };
   html_url: string;
   description: string | null;
   fork: boolean;

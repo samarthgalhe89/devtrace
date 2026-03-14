@@ -8,8 +8,7 @@ import {
   fetchRepoLanguages,
 } from "@/lib/github";
 import { calculateRepoStats, aggregateLanguages } from "@/lib/analytics";
-import { calculateAllHealthScores } from "@/lib/scoring";
-import { calculateActivityTimeline } from "@/lib/activity";
+import { generateDeveloperDNA } from "@/lib/ai";
 
 export async function GET(request: Request) {
   try {
@@ -24,11 +23,9 @@ export async function GET(request: Request) {
     let repos;
 
     if (username) {
-      // Fetch a specific user (search feature)
       user = await fetchUser(username, token);
       repos = await fetchRepos(username, token);
     } else if (token) {
-      // Fetch authenticated user's own data
       user = await fetchAuthenticatedUser(token);
       repos = await fetchRepos(user.login, token);
     } else {
@@ -38,14 +35,9 @@ export async function GET(request: Request) {
       );
     }
 
-    // Process Phase 3 analytics
+    // Process base analytics needed for the prompt
     const stats = calculateRepoStats(repos);
     
-    // Process Phase 4 analytics
-    const healthScores = calculateAllHealthScores(repos);
-    const activity = calculateActivityTimeline(repos);
-    
-    // Fetch languages for up to top 30 most recently updated repos to avoid hitting UI/API limits too hard
     const topRepos = repos.slice(0, 30);
     const languagesPromises = topRepos.map((repo) =>
       fetchRepoLanguages(repo.owner.login, repo.name, token)
@@ -53,14 +45,15 @@ export async function GET(request: Request) {
     const reposLanguages = await Promise.all(languagesPromises);
     const languages = aggregateLanguages(reposLanguages);
 
-    return NextResponse.json({ user, repos, stats, languages, healthScores, activity });
-  } catch (error: any) {
-    const status = error.message?.includes("not found")
-      ? 404
-      : error.message?.includes("rate limit")
-        ? 429
-        : 500;
+    // Call Gemini API to generate the DNA Profile
+    const dna = await generateDeveloperDNA(user, repos, stats, languages);
 
-    return NextResponse.json({ error: error.message }, { status });
+    return NextResponse.json({ dna });
+  } catch (error: any) {
+    console.error("AI Insights Route Error:", error);
+    return NextResponse.json(
+      { error: "Failed to generate AI insights." },
+      { status: 500 }
+    );
   }
 }
