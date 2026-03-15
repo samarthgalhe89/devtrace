@@ -42,7 +42,16 @@ export default function DashboardLayout({
       {/* Mobile Header (shown on small screens only) */}
       <div className="flex-1 flex flex-col min-h-screen">
         <header className="lg:hidden border-b border-border px-4 py-3 flex items-center justify-between bg-background/80 backdrop-blur-md sticky top-0 z-50">
-          <span className="text-sm font-bold gradient-text">GitHub Intelligence</span>
+          <div className="flex items-center gap-2">
+            <img
+              src="/logo.svg"
+              alt="Logo"
+              width={24}
+              height={24}
+              className="w-6 h-6 object-contain"
+            />
+            <span className="text-sm font-bold gradient-text">GitHub Intelligence</span>
+          </div>
           <div className="flex items-center gap-2">
             <a
               href="/dashboard"

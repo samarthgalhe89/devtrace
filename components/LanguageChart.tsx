@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { Palette } from "lucide-react";
 
 interface LanguageChartProps {
   data: LanguageStat[];
@@ -48,7 +49,7 @@ export default function LanguageChart({ data }: LanguageChartProps) {
   return (
     <div className="glass-card p-6 h-[320px] flex flex-col animate-fade-in">
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-xl">🎨</span>
+        <Palette className="w-5 h-5 text-accent" />
         <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
           Language Distribution
         </h3>

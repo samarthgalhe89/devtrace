@@ -3,6 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AlertTriangle } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 import RepoStatsCards from "@/components/RepoStats";
 import LanguageChart from "@/components/LanguageChart";
@@ -106,7 +107,7 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen grid-bg flex items-center justify-center">
         <div className="glass-card p-8 text-center max-w-md animate-fade-in">
-          <p className="text-3xl mb-3">⚠️</p>
+          <AlertTriangle className="w-8 h-8 text-warning mx-auto mb-3" />
           <h2 className="text-lg font-semibold text-foreground mb-2">
             Something went wrong
           </h2>

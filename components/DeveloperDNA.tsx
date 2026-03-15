@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DeveloperDNA } from "@/lib/ai";
+import { Sparkles, CheckCircle2, TrendingUp, Bot } from "lucide-react";
 
 interface DeveloperDNAProps {
   username?: string; // Optional: If provided, fetches for that user; else authenticated user
@@ -13,6 +14,9 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const abortController = new AbortController();
+    let ignore = false;
+
     const fetchDNA = async () => {
       try {
         setLoading(true);
@@ -22,21 +26,32 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
           ? `/api/ai-insights?username=${username}`
           : "/api/ai-insights";
 
-        const res = await fetch(url);
+        const res = await fetch(url, { signal: abortController.signal });
         if (!res.ok) {
           throw new Error("Failed to generate insights.");
         }
 
         const data = await res.json();
-        setDna(data.dna);
+        if (!ignore) {
+          setDna(data.dna);
+        }
       } catch (err: any) {
-        setError(err.message);
+        if (!ignore && err.name !== "AbortError") {
+          setError(err.message);
+        }
       } finally {
-        setLoading(false);
+        if (!ignore) {
+          setLoading(false);
+        }
       }
     };
 
     fetchDNA();
+
+    return () => {
+      ignore = true;
+      abortController.abort();
+    };
   }, [username]);
 
   if (loading) {
@@ -47,7 +62,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-accent/20 animate-spin flex items-center justify-center">
-                <span className="text-[10px]">✨</span>
+                <Sparkles className="w-3 h-3 text-accent" />
               </div>
               <div className="h-6 bg-surface rounded w-1/3"></div>
             </div>
@@ -80,7 +95,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
   if (error || !dna) {
     return (
       <div className="glass-card p-6 border-danger/20 text-center">
-        <p className="text-xl mb-2">🤖</p>
+        <Bot className="w-6 h-6 text-danger/80 mx-auto mb-2" />
         <p className="text-sm text-danger/80">
           AI analysis temporarily unavailable. Ensure GEMINI_API_KEY is configured.
         </p>
@@ -99,10 +114,10 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
           {/* Left Column: Archetype & Summary (takes 3 cols on large screens) */}
           <div className="lg:col-span-3">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20 shrink-0">
-                <span className="text-white text-sm">✨</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-teal-500 flex items-center justify-center shadow-lg shadow-blue-500/20 shrink-0">
+                <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
+              <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">
                 {dna.archetype}
               </h3>
             </div>
@@ -116,7 +131,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
           <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-8 border-t lg:border-t-0 lg:border-l border-border pt-6 lg:pt-0 lg:pl-8 lg:ml-4">
             <div>
               <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <span className="text-success">◆</span> Core Strengths
+                <CheckCircle2 className="w-3.5 h-3.5 text-success" /> Core Strengths
               </h4>
               <ul className="space-y-2">
                 {dna.strengths.map((strength, i) => (
@@ -130,7 +145,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
 
             <div>
               <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <span className="text-warning">◆</span> Growth Areas
+                <TrendingUp className="w-3.5 h-3.5 text-warning" /> Growth Areas
               </h4>
               <ul className="space-y-2">
                 {dna.growthAreas.map((area, i) => (

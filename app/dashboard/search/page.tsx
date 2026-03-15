@@ -11,6 +11,7 @@ import { GitHubUser, GitHubRepo } from "@/lib/github";
 import { RepoStats, LanguageStat } from "@/lib/analytics";
 import { RepoHealth } from "@/lib/scoring";
 import { ActivityTimelinePoint } from "@/lib/activity";
+import { Search } from "lucide-react";
 
 interface DashboardData {
   user: GitHubUser;
@@ -69,7 +70,7 @@ export default function SearchPage() {
 
           <form onSubmit={handleSearch} className="relative group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <span className="text-muted-foreground text-lg transition-colors group-focus-within:text-accent">🔍</span>
+              <Search className="w-5 h-5 text-muted-foreground transition-colors group-focus-within:text-accent" />
             </div>
             <input
               type="text"

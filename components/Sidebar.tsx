@@ -36,12 +36,20 @@ export default function Sidebar() {
   return (
     <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 border-r border-border bg-background/60 backdrop-blur-xl shrink-0">
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-border">
-        <Link href="/dashboard" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/20">
-            <span className="text-white text-sm font-bold">G</span>
+      <div className="px-6 py-6 border-b border-border">
+        <Link href="/dashboard" className="flex items-center gap-1">
+          <div className="w-12 h-12 flex items-center justify-center shrink-0">
+            <img
+              src="/logo.svg"
+              alt="GitHub Intelligence Logo"
+              width={48}
+              height={48}
+              className="w-full h-full object-contain"
+            />
           </div>
-          <span className="text-sm font-bold gradient-text">GitHub Intelligence</span>
+          <span className="text-base font-bold gradient-text leading-tight">
+            GitHub<br />Intelligence
+          </span>
         </Link>
       </div>
 
@@ -59,15 +67,15 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
                 isActive
-                  ? "bg-accent/10 text-accent border border-accent/20"
-                  : "text-muted-foreground hover:bg-surface-hover hover:text-foreground border border-transparent"
+                  ? "bg-accent/10 text-white border border-accent/20"
+                  : "text-white/80 hover:bg-surface-hover hover:text-white border border-transparent"
               }`}
             >
               <span
                 className={`transition-colors ${
                   isActive
                     ? "text-accent"
-                    : "text-muted-foreground group-hover:text-foreground"
+                    : "text-muted-foreground group-hover:text-white"
                 }`}
               >
                 {item.icon}

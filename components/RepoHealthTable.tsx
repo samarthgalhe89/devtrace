@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RepoHealth } from "@/lib/scoring";
+import { HeartPulse } from "lucide-react";
 
 interface RepoHealthTableProps {
   data: RepoHealth[];
@@ -24,7 +25,7 @@ export default function RepoHealthTable({ data }: RepoHealthTableProps) {
     <div className="glass-card overflow-hidden animate-fade-in">
       <div className="p-6 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="text-xl">🏥</span>
+          <HeartPulse className="w-5 h-5 text-accent" />
           <h3 className="text-base font-semibold text-foreground">
             Repository Health
           </h3>

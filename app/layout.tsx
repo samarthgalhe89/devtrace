@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   description:
     "Analyze any GitHub developer's profile with rich analytics, visualizations, and AI-powered insights.",
   keywords: ["github", "analytics", "dashboard", "developer", "insights"],
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
