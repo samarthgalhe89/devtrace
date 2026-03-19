@@ -54,13 +54,16 @@ export async function GET(request: Request) {
     const languages = aggregateLanguages(reposLanguages);
 
     return NextResponse.json({ user, repos, stats, languages, healthScores, activity });
-  } catch (error: any) {
-    const status = error.message?.includes("not found")
-      ? 404
-      : error.message?.includes("rate limit")
-        ? 429
-        : 500;
-
-    return NextResponse.json({ error: error.message }, { status });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      const status = error.message.includes("not found")
+        ? 404
+        : error.message.includes("rate limit")
+          ? 429
+          : 500;
+  
+      return NextResponse.json({ error: error.message }, { status });
+    }
+    return NextResponse.json({ error: "Unknown error occurred" }, { status: 500 });
   }
 }

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const navItems = [
   {
@@ -67,15 +69,15 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
                 isActive
-                  ? "bg-accent/10 text-white border border-accent/20"
-                  : "text-white/80 hover:bg-surface-hover hover:text-white border border-transparent"
+                  ? "bg-accent/10 text-accent border border-accent/20"
+                  : "text-muted-foreground hover:bg-surface-hover hover:text-foreground border border-transparent"
               }`}
             >
               <span
                 className={`transition-colors ${
                   isActive
                     ? "text-accent"
-                    : "text-muted-foreground group-hover:text-white"
+                    : "text-muted-foreground group-hover:text-foreground"
                 }`}
               >
                 {item.icon}
@@ -90,13 +92,10 @@ export default function Sidebar() {
       {session?.user && (
         <div className="px-4 py-4 border-t border-border">
           <div className="flex items-center gap-3 mb-3 px-2">
-            {session.user.image && (
-              <img
-                src={session.user.image}
-                alt="avatar"
-                className="w-8 h-8 rounded-full ring-2 ring-border"
-              />
-            )}
+            <Avatar className="w-8 h-8 ring-2 ring-border">
+              {session.user.image && <AvatarImage src={session.user.image} alt="avatar" />}
+              <AvatarFallback>{session.user.name?.slice(0, 2).toUpperCase() || "GH"}</AvatarFallback>
+            </Avatar>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-foreground truncate">
                 {session.user.name}
@@ -106,12 +105,13 @@ export default function Sidebar() {
               </p>
             </div>
           </div>
-          <button
+          <Button
+            variant="outline"
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="w-full text-xs font-medium text-muted-foreground hover:text-danger hover:bg-danger/10 hover:border-danger/50 transition-colors px-3 py-2 rounded-lg border border-border bg-surface text-center"
+            className="w-full text-xs h-9 font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 hover:border-destructive/50 transition-colors"
           >
             Logout
-          </button>
+          </Button>
         </div>
       )}
     </aside>

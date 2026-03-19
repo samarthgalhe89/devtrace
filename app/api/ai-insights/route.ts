@@ -49,8 +49,8 @@ export async function GET(request: Request) {
     const dna = await generateDeveloperDNA(user, repos, stats, languages);
 
     return NextResponse.json({ dna });
-  } catch (error: any) {
-    console.error("AI Insights Route Error:", error);
+  } catch (error: unknown) {
+    console.error("AI Insights Route Error:", error instanceof Error ? error.message : error);
     return NextResponse.json(
       { error: "Failed to generate AI insights." },
       { status: 500 }

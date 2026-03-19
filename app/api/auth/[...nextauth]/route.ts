@@ -1,6 +1,12 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
@@ -24,7 +30,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       // Make access token available in the session
-      (session as any).accessToken = token.accessToken;
+      session.accessToken = token.accessToken as string;
       return session;
     },
   },

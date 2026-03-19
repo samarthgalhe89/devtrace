@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { DeveloperDNA } from "@/lib/ai";
 import { Sparkles, CheckCircle2, TrendingUp, Bot } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DeveloperDNAProps {
   username?: string; // Optional: If provided, fetches for that user; else authenticated user
@@ -35,9 +37,11 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
         if (!ignore) {
           setDna(data.dna);
         }
-      } catch (err: any) {
-        if (!ignore && err.name !== "AbortError") {
+      } catch (err: unknown) {
+        if (!ignore && err instanceof Error && err.name !== "AbortError") {
           setError(err.message);
+        } else if (!ignore && !(err instanceof Error)) {
+          setError("An unknown error occurred");
         }
       } finally {
         if (!ignore) {
@@ -56,58 +60,58 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
 
   if (loading) {
     return (
-      <div className="glass-card p-6 lg:p-8 animate-pulse">
-        <div className="flex flex-col gap-8">
+      <Card className="w-full animate-pulse border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
+        <CardContent className="p-6 lg:p-8 flex flex-col gap-8">
           {/* Top Section Skeleton */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-8 h-8 rounded-full bg-accent/20 animate-spin flex items-center justify-center">
-                <Sparkles className="w-3 h-3 text-accent" />
-              </div>
-              <div className="h-6 bg-surface rounded w-1/4"></div>
+              <Skeleton className="w-8 h-8 rounded-full" />
+              <Skeleton className="h-6 w-1/4" />
             </div>
             <div className="space-y-3">
-              <div className="h-4 bg-surface rounded w-full"></div>
-              <div className="h-4 bg-surface rounded w-full"></div>
-              <div className="h-4 bg-surface rounded w-3/4"></div>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
             </div>
           </div>
 
-          <div className="h-px w-full bg-surface/50" />
+          <div className="h-px w-full bg-border/50" />
 
           {/* Bottom Sections Skeleton */}
           <div className="flex flex-col gap-8">
             <div className="space-y-4">
-              <div className="h-5 bg-surface rounded w-1/4 mb-2"></div>
-              <div className="h-16 bg-surface rounded w-full"></div>
+              <Skeleton className="h-5 w-1/4 mb-2" />
+              <Skeleton className="h-16 w-full" />
             </div>
             <div className="space-y-4">
-              <div className="h-5 bg-surface rounded w-1/4 mb-2"></div>
-              <div className="h-16 bg-surface rounded w-full"></div>
+              <Skeleton className="h-5 w-1/4 mb-2" />
+              <Skeleton className="h-16 w-full" />
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (error || !dna) {
     return (
-      <div className="glass-card p-6 border-danger/20 text-center">
-        <Bot className="w-6 h-6 text-danger/80 mx-auto mb-2" />
-        <p className="text-sm text-danger/80">
-          AI analysis temporarily unavailable. Ensure GEMINI_API_KEY is configured.
-        </p>
-      </div>
+      <Card className="border-destructive/20 bg-destructive/5 text-center">
+        <CardContent className="p-6">
+          <Bot className="w-6 h-6 text-destructive mx-auto mb-2" />
+          <p className="text-sm text-destructive font-medium">
+            AI analysis temporarily unavailable. Ensure GEMINI_API_KEY is configured.
+          </p>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="glass-card p-0 overflow-hidden relative group animate-fade-in w-full">
+    <Card className="p-0 overflow-hidden relative group animate-fade-in w-full border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
       {/* Decorative Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-background to-background opacity-50 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-background to-background opacity-50 z-0 pointer-events-none" />
       
-      <div className="relative z-10 p-6 lg:p-8">
+      <CardContent className="relative z-10 p-6 lg:p-8">
         <div className="flex flex-col gap-8">
           
           {/* Top Section: Archetype & Summary */}
@@ -137,7 +141,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
               </h4>
               <ul className="flex flex-col gap-3">
                 {dna.strengths.map((strength, i) => (
-                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-3 bg-surface/30 p-4 rounded-xl border border-border/50 hover:border-success/30 transition-colors">
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-3 bg-secondary/30 p-4 rounded-xl border border-border/50 hover:border-success/30 transition-colors">
                     <span className="text-success mt-1 shrink-0">•</span>
                     <span>{strength}</span>
                   </li>
@@ -151,7 +155,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
               </h4>
               <ul className="flex flex-col gap-3">
                 {dna.growthAreas.map((area, i) => (
-                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-3 bg-surface/30 p-4 rounded-xl border border-border/50 hover:border-warning/30 transition-colors">
+                  <li key={i} className="text-sm text-muted-foreground flex items-start gap-3 bg-secondary/30 p-4 rounded-xl border border-border/50 hover:border-warning/30 transition-colors">
                     <span className="text-warning mt-1 shrink-0">•</span>
                     <span>{area}</span>
                   </li>
@@ -161,10 +165,10 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
           </div>
           
         </div>
-      </div>
+      </CardContent>
       
       {/* Subtle shine effect on hover */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 z-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full" style={{ transition: 'all 1.5s ease' }} />
-    </div>
+    </Card>
   );
 }

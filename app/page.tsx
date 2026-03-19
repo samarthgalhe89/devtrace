@@ -3,8 +3,9 @@
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { Github, Search, ChevronRight, BarChart3, Dna, HeartPulse, Bot } from "lucide-react";
-import Link from "next/link";
+import { Github, ChevronRight, BarChart3, Dna, HeartPulse, Bot } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const features = [
   {
@@ -71,7 +72,7 @@ export default function HomePage() {
 
         {/* Title */}
         <h1 className="animate-fade-in animate-fade-in-delay-1 text-center font-bold tracking-tight mb-6" style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", lineHeight: 1.1 }}>
-          Your GitHub profile's health<br />report, in one dashboard
+          Your GitHub profile&apos;s health<br />report, in one dashboard
         </h1>
 
         {/* Subtitle */}
@@ -81,14 +82,14 @@ export default function HomePage() {
 
         {/* Buttons Row */}
         <div className="animate-fade-in animate-fade-in-delay-3 flex items-center justify-center mb-16">
-          <button 
+          <Button 
             onClick={handleLogin}
             disabled={status === "loading"}
-            className="btn-github flex items-center gap-2.5 bg-[#238636] hover:bg-[#2ea043] text-white px-8 py-3 rounded-lg text-sm font-semibold cursor-pointer"
+            className="flex items-center gap-2.5 bg-[#238636] hover:bg-[#2ea043] text-white px-8 py-6 rounded-lg text-sm font-semibold cursor-pointer border-none"
           >
             <Github className="w-5 h-5" />
             Login with GitHub
-          </button>
+          </Button>
         </div>
 
         {/* Terminal Mockup Footer */}
@@ -128,22 +129,24 @@ export default function HomePage() {
       {/* Feature cards below the fold */}
       <div className="animate-fade-in animate-fade-in-delay-4 relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-20 max-w-5xl mx-auto w-full px-4">
         {features.map((f) => (
-          <div
+          <Card
             key={f.title}
-            className="glass-card p-6 flex flex-col items-start gap-4 hover:-translate-y-1 transition-transform"
+            className="flex flex-col items-start gap-4 hover:-translate-y-1 transition-transform border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50"
           >
-            <div className="p-3 rounded-lg bg-surface border border-border">
-              {f.icon}
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold text-foreground mb-1">
-                {f.title}
-              </h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                {f.description}
-              </p>
-            </div>
-          </div>
+            <CardContent className="p-6">
+              <div className="p-3 rounded-lg bg-surface border border-border inline-block mb-4">
+                {f.icon}
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-foreground mb-1">
+                  {f.title}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {f.description}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
       

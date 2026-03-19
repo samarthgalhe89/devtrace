@@ -11,50 +11,51 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Activity } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TooltipProps } from "recharts";
 
 interface ActivityChartProps {
   data: ActivityTimelinePoint[];
 }
 
-export default function ActivityChart({ data }: ActivityChartProps) {
-  if (!data || data.length === 0) {
+// Custom tooltips
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
     return (
-      <div className="glass-card p-6 h-[320px] flex items-center justify-center animate-fade-in">
-        <p className="text-muted-foreground text-sm">No activity data available</p>
+      <div className="bg-surface border border-border px-4 py-3 rounded-xl shadow-xl backdrop-blur-md">
+        <p className="text-sm text-muted-foreground mb-1">{label}</p>
+        <div className="flex items-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-accent" />
+          <span className="font-semibold text-foreground">
+            {payload[0].value} {payload[0].value === 1 ? "repo" : "repos"} updated
+          </span>
+        </div>
       </div>
     );
   }
+  return null;
+};
 
-  // Custom tooltips
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-surface border border-border px-4 py-3 rounded-xl shadow-xl backdrop-blur-md">
-          <p className="text-sm text-muted-foreground mb-1">{label}</p>
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-accent" />
-            <span className="font-semibold text-foreground">
-              {payload[0].value} {payload[0].value === 1 ? "repo" : "repos"} updated
-            </span>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
+export default function ActivityChart({ data }: ActivityChartProps) {
+  if (!data || data.length === 0) {
+    return (
+      <Card className="h-full min-h-[320px] flex items-center justify-center animate-fade-in border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
+        <p className="text-muted-foreground text-sm">No activity data available</p>
+      </Card>
+    );
+  }
 
   return (
-    <div className="glass-card p-6 h-[320px] flex flex-col animate-fade-in">
-      <div className="flex items-center justify-between mb-6">
+    <Card className="flex flex-col h-full min-h-[320px] animate-fade-in border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
+      <CardHeader className="p-6 pb-2 flex flex-col mb-4 space-y-0 shrink-0">
         <div className="flex items-center gap-2">
           <Activity className="w-5 h-5 text-accent" />
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+          <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
             Update Activity (Last 12 Mo)
-          </h3>
+          </CardTitle>
         </div>
-      </div>
-
-      <div className="flex-1 w-full min-h-0 relative">
+      </CardHeader>
+      <CardContent className="flex-1 w-full min-h-0 relative p-6 pt-0">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}
@@ -98,7 +99,7 @@ export default function ActivityChart({ data }: ActivityChartProps) {
             />
           </AreaChart>
         </ResponsiveContainer>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
