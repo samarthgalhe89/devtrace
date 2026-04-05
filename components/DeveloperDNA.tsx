@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { DeveloperDNA } from "@/lib/ai";
-import { Sparkles, CheckCircle2, TrendingUp, Bot, Brain, Rocket } from "lucide-react";
+import { Sparkles, CheckCircle2, TrendingUp, Bot, Brain, Rocket, Download } from "lucide-react";
+import { exportAsImage } from "@/lib/exportImage";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -60,7 +61,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
 
   if (loading) {
     return (
-      <Card className="w-full animate-pulse border-border bg-white shadow-sm">
+      <Card className="w-full animate-pulse border-border bg-card shadow-sm">
         <CardContent className="p-6 lg:p-8 flex flex-col gap-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -93,7 +94,7 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
         <CardContent className="p-6">
           <Bot className="w-6 h-6 text-destructive mx-auto mb-2" />
           <p className="text-sm text-destructive font-medium">
-            AI analysis temporarily unavailable. Check GEMINI_API_KEY.
+            AI analysis temporarily unavailable.
           </p>
         </CardContent>
       </Card>
@@ -101,17 +102,25 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
   }
 
   return (
-    <Card className="p-0 overflow-hidden relative group animate-fade-in w-full border-border bg-white shadow-sm">
+    <Card id="developer-dna-card" className="p-0 overflow-hidden relative group animate-fade-in w-full border-border bg-card shadow-sm">
       <CardContent className="relative z-10 p-6 lg:p-10">
+        {/* Export Button */}
+        <button
+          onClick={() => exportAsImage("developer-dna-card", `${username || 'my'}-developer-dna`)}
+          className="absolute top-6 right-6 lg:top-10 lg:right-10 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/80 text-foreground hover:bg-secondary text-xs font-bold transition-colors z-50 border border-border/50 shadow-sm"
+        >
+          <Download className="w-3.5 h-3.5" />
+          Export DNA
+        </button>
         <div className="flex flex-col gap-10">
           
           {/* Top Section: Archetype & Summary */}
           <div className="max-w-5xl">
             <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center shadow-lg shadow-slate-900/20 shrink-0">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-2xl bg-secondary flex items-center justify-center shadow-lg shadow-black/20 shrink-0">
+                <Sparkles className="w-6 h-6 text-foreground" />
               </div>
-              <h3 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+              <h3 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">
                 {dna.archetype}
               </h3>
             </div>
@@ -119,12 +128,12 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
             {/* Core Personality Tags */}
             {dna.personality && dna.personality.length > 0 && (
               <div className="mb-8">
-                <h4 className="text-[12px] font-extrabold text-slate-800 uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
+                <h4 className="text-[12px] font-extrabold text-foreground uppercase tracking-[0.2em] flex items-center gap-2 mb-4">
                   <Brain className="w-4 h-4" /> Core Personality
                 </h4>
                 <div className="flex flex-wrap gap-2.5">
                   {dna.personality?.map((trait, i) => (
-                    <span key={i} className="px-5 py-2 bg-slate-50 text-slate-800 text-[13px] font-semibold rounded-full border border-slate-200 shadow-sm">
+                    <span key={i} className="px-5 py-2 bg-secondary/50 text-foreground text-[13px] font-semibold rounded-full border border-border shadow-sm">
                       {trait}
                     </span>
                   ))}
@@ -183,9 +192,9 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
             </h4>
             <div className="flex flex-col gap-4">
               {dna.careerRoadmap?.map((tech, i) => (
-                <div key={i} className="flex items-start gap-4 p-5 bg-blue-50/10 rounded-xl border border-blue-100 shadow-sm hover:shadow-md hover:border-blue-200 transition-all">
-                  <span className="text-blue-500 shrink-0 font-medium text-lg mt-[-2px]">→</span>
-                  <p className="text-[15px] xl:text-base text-slate-600 font-medium leading-relaxed">
+                <div key={i} className="flex items-start gap-4 p-5 bg-primary/10 rounded-xl border border-primary/20 shadow-sm hover:shadow-md hover:border-primary/40 transition-all">
+                  <span className="text-primary shrink-0 font-medium text-lg mt-[-2px]">→</span>
+                  <p className="text-[15px] xl:text-base text-card-foreground font-medium leading-relaxed">
                     {tech}
                   </p>
                 </div>

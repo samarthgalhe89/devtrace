@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GitHub Intelligence Dashboard",
+  title: "DevDNA",
   description:
     "Analyze any GitHub developer's profile with rich analytics, visualizations, and AI-powered insights.",
   keywords: ["github", "analytics", "dashboard", "developer", "insights"],

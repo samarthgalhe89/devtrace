@@ -5,6 +5,8 @@ import { RepoHealth } from "@/lib/scoring";
 import { HeartPulse } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import RepoDetailsModal from "@/components/RepoDetailsModal";
+import { GitHubRepo } from "@/lib/github";
 
 interface RepoHealthTableProps {
   data: RepoHealth[];
@@ -12,6 +14,7 @@ interface RepoHealthTableProps {
 
 export default function RepoHealthTable({ data }: RepoHealthTableProps) {
   const [showAll, setShowAll] = useState(false);
+  const [selectedRepo, setSelectedRepo] = useState<GitHubRepo | null>(null);
 
   if (!data || data.length === 0) {
     return (
@@ -24,7 +27,7 @@ export default function RepoHealthTable({ data }: RepoHealthTableProps) {
   const displayData = showAll ? data : data.slice(0, 10);
 
   return (
-    <Card className="overflow-hidden animate-fade-in border-border bg-white p-0">
+    <Card className="overflow-hidden animate-fade-in border-border bg-card p-0">
       <CardHeader className="p-6 pb-5 border-b border-border flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
           <HeartPulse className="w-5 h-5 text-accent" />
@@ -51,13 +54,15 @@ export default function RepoHealthTable({ data }: RepoHealthTableProps) {
             {displayData.map((item) => (
               <tr
                 key={item.repo.id}
-                className="hover:bg-secondary/30 transition-colors group"
+                onClick={() => setSelectedRepo(item.repo)}
+                className="hover:bg-secondary/30 transition-colors group cursor-pointer"
               >
                 <td className="px-6 py-4">
                   <a
                     href={item.repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     className="font-medium text-foreground group-hover:text-accent transition-colors block"
                   >
                     {item.repo.name}
@@ -121,6 +126,12 @@ export default function RepoHealthTable({ data }: RepoHealthTableProps) {
           </div>
         )}
       </CardContent>
+
+      {/* Modal */}
+      <RepoDetailsModal 
+        repo={selectedRepo} 
+        onClose={() => setSelectedRepo(null)} 
+      />
     </Card>
   );
 }

@@ -1,14 +1,18 @@
 import { GitHubUser } from "@/lib/github";
-import { FolderGit2, Users, UserCheck, MapPin, Building2, CalendarDays, ExternalLink, Share } from "lucide-react";
+import { FolderGit2, Users, UserCheck, MapPin, Building2, CalendarDays, ExternalLink, Share, Download } from "lucide-react";
+import { exportAsImage } from "@/lib/exportImage";
 import { toast } from "sonner"; // Assuming sonner is used for toasts, otherwise I'll use a fallback
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import BadgesDisplay from "@/components/BadgesDisplay";
+import { Badge } from "@/lib/badges";
 
 interface ProfileCardProps {
   user: GitHubUser;
+  badges?: Badge[];
 }
 
-export default function ProfileCard({ user }: ProfileCardProps) {
+export default function ProfileCard({ user, badges }: ProfileCardProps) {
   const joinedDate = new Date(user.created_at).toLocaleDateString("en-US", {
     month: "long",
     year: "numeric",
@@ -30,12 +34,12 @@ export default function ProfileCard({ user }: ProfileCardProps) {
   };
 
   return (
-    <Card className="w-full animate-fade-in border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
+    <Card id="profile-card" className="w-full animate-fade-in border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
       <CardContent className="p-6 lg:p-8">
         <div className="flex flex-col lg:flex-row items-center lg:items-center justify-between gap-8">
           
           {/* Left Side: Avatar + Info */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 flex-1 text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 flex-1 text-center sm:text-left min-w-0 w-full">
             {/* Avatar with Hover Link */}
             <a
               href={user.html_url}
@@ -45,7 +49,7 @@ export default function ProfileCard({ user }: ProfileCardProps) {
               title="View Profile on GitHub"
             >
               <Avatar className="w-24 h-24 lg:w-28 lg:h-28 ring-2 ring-border ring-offset-2 ring-offset-background transition-all group-hover:ring-accent">
-                <AvatarImage src={user.avatar_url} alt={`${user.login}'s avatar`} />
+                <AvatarImage src={user.avatar_url} alt={`${user.login}'s avatar`} crossOrigin="anonymous" />
                 <AvatarFallback>{user.login.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
               {/* Hover Overlay */}
@@ -58,8 +62,8 @@ export default function ProfileCard({ user }: ProfileCardProps) {
             </a>
 
             {/* Info */}
-            <div className="flex-1">
-              <h2 className="text-2xl font-bold text-foreground">
+            <div className="flex-1 min-w-0 w-full">
+              <h2 className="text-2xl font-bold text-foreground break-words">
                 {user.name || user.login}
               </h2>
               <a
@@ -75,7 +79,7 @@ export default function ProfileCard({ user }: ProfileCardProps) {
               </a>
 
               {user.bio && (
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-lg mx-auto sm:mx-0">
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-lg mx-auto sm:mx-0 break-words">
                   {user.bio}
                 </p>
               )}
@@ -99,12 +103,18 @@ export default function ProfileCard({ user }: ProfileCardProps) {
                   Joined {joinedDate}
                 </span>
               </div>
+              
+              {badges && badges.length > 0 && (
+                <div className="mt-6 flex justify-center sm:justify-start">
+                  <BadgesDisplay badges={badges} />
+                </div>
+              )}
             </div>
           </div>
 
           {/* Right Side: Stats bar + Share */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-10 pt-6 lg:pt-0 border-t lg:border-t-0 lg:border-l border-border lg:pl-10 w-full lg:w-auto justify-center sm:justify-start">
-            <div className="flex items-center gap-6 lg:gap-10">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 sm:gap-6 lg:gap-10 pt-6 lg:pt-0 border-t lg:border-t-0 lg:border-l border-border lg:pl-10 w-full lg:w-auto justify-center sm:justify-start">
+            <div className="flex flex-wrap items-center justify-center gap-6 lg:gap-10">
               {stats.map((s) => (
                 <div
                   key={s.label}
@@ -123,13 +133,22 @@ export default function ProfileCard({ user }: ProfileCardProps) {
             
             <div className="h-10 w-px bg-border hidden sm:block mx-2" />
             
-            <button
-              onClick={handleShare}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all"
-            >
-              <Share className="w-4 h-4" />
-              Share Profile
-            </button>
+            <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+              <button
+                onClick={() => exportAsImage("profile-card", `${user.login}-profile`)}
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-secondary/80 text-foreground hover:bg-secondary text-sm font-bold shadow-sm hover:scale-105 active:scale-95 transition-all outline outline-1 outline-border w-full sm:w-auto"
+              >
+                <Download className="w-4 h-4" />
+                Download
+              </button>
+              <button
+                onClick={handleShare}
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all w-full sm:w-auto"
+              >
+                <Share className="w-4 h-4" />
+                Share Profile
+              </button>
+            </div>
           </div>
 
         </div>

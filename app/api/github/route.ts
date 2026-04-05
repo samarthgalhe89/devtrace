@@ -6,6 +6,8 @@ import {
   fetchUser,
   fetchRepos,
   fetchRepoLanguages,
+  fetchContributions,
+  fetchCollaborationStats
 } from "@/lib/github";
 import { calculateRepoStats, aggregateLanguages } from "@/lib/analytics";
 import { calculateAllHealthScores } from "@/lib/scoring";
@@ -53,7 +55,13 @@ export async function GET(request: Request) {
     const reposLanguages = await Promise.all(languagesPromises);
     const languages = aggregateLanguages(reposLanguages);
 
-    return NextResponse.json({ user, repos, stats, languages, healthScores, activity });
+    // Phase 4: Contribution Heatmap
+    const contributions = await fetchContributions(user.login, token);
+
+    // Phase 6: Collaboration Stats
+    const collaboration = await fetchCollaborationStats(user.login, token);
+
+    return NextResponse.json({ user, repos, stats, languages, healthScores, activity, contributions, collaboration });
   } catch (error: unknown) {
     if (error instanceof Error) {
       const status = error.message.includes("not found")

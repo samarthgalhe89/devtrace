@@ -20,6 +20,15 @@ interface GlobalStateContextType {
   setVersusUser2Search: (name: string) => void;
   versusData2: any;
   setVersusData2: (data: any) => void;
+
+  graveyardData: any;
+  setGraveyardData: (data: any) => void;
+
+  nemesisData: any;
+  setNemesisData: (data: any) => void;
+
+  stressData: any;
+  setStressData: (data: any) => void;
 }
 
 const GlobalStateContext = createContext<GlobalStateContextType | undefined>(undefined);
@@ -36,6 +45,10 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
   const [versusUser2Search, setVersusUser2Search] = useState<string>("");
   const [versusData2, setVersusData2] = useState<any>(null);
 
+  const [graveyardData, setGraveyardData] = useState<any>(null);
+  const [nemesisData, setNemesisData] = useState<any>(null);
+  const [stressData, setStressData] = useState<any>(null);
+
   const value = {
     dashboardData, setDashboardData,
     searchUsername, setSearchUsername,
@@ -44,6 +57,9 @@ export function GlobalStateProvider({ children }: { children: ReactNode }) {
     versusData1, setVersusData1,
     versusUser2Search, setVersusUser2Search,
     versusData2, setVersusData2,
+    graveyardData, setGraveyardData,
+    nemesisData, setNemesisData,
+    stressData, setStressData,
   };
 
   return (

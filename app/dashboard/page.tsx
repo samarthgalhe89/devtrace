@@ -10,11 +10,15 @@ import LanguageChart from "@/components/LanguageChart";
 import RepoHealthTable from "@/components/RepoHealthTable";
 import ActivityChart from "@/components/ActivityChart";
 import DeveloperDNAComponent from "@/components/DeveloperDNA";
-import { GitHubUser, GitHubRepo } from "@/lib/github";
+import CityscapeHeatmap from "@/components/CityscapeHeatmap";
+import HolographicStats from "@/components/HolographicStats";
+import CollaborationStats from "@/components/CollaborationStats";
+import { GitHubUser, GitHubRepo, CollaborationStatsData } from "@/lib/github";
 import { RepoStats, LanguageStat } from "@/lib/analytics";
 import { RepoHealth } from "@/lib/scoring";
 import { ActivityTimelinePoint } from "@/lib/activity";
 import { useGlobalState } from "@/components/GlobalStateProvider";
+import { evaluateBadges } from "@/lib/badges";
 
 interface DashboardData {
   user: GitHubUser;
@@ -23,6 +27,8 @@ interface DashboardData {
   languages: LanguageStat[];
   healthScores: RepoHealth[];
   activity: ActivityTimelinePoint[];
+  contributions?: any;
+  collaboration?: CollaborationStatsData;
 }
 
 export default function DashboardPage() {
@@ -133,6 +139,8 @@ export default function DashboardPage() {
 
   if (!data) return null;
 
+  const badges = evaluateBadges(data.user, data.stats, data.languages, data.activity);
+
   return (
     <div className="min-h-screen grid-bg">
       {/* Main content */}
@@ -140,7 +148,7 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-8">
           
           {/* Top Banner: Profile */}
-          <ProfileCard user={data.user} />
+          <ProfileCard user={data.user} badges={badges} />
           
           {/* Phase 3: Repo Stats Cards */}
           <RepoStatsCards stats={data.stats} />
@@ -154,8 +162,23 @@ export default function DashboardPage() {
             <LanguageChart data={data.languages} />
           </div>
 
+          {/* Phase 4: 3D Cityscape Heatmap & Holographic Stats */}
+          {data.contributions && (
+            <div className="w-full">
+              <HolographicStats data={data.contributions} />
+              <CityscapeHeatmap data={data.contributions} />
+            </div>
+          )}
+
+          {/* Phase 6: Collaboration Stats */}
+          {data.collaboration && (
+            <div className="w-full mt-2">
+              <CollaborationStats data={data.collaboration} />
+            </div>
+          )}
+
           {/* AI Insights Banner */}
-          <div className="w-full">
+          <div className="w-full mt-4">
             {/* Phase 5: AI Insights */}
             <DeveloperDNAComponent />
           </div>

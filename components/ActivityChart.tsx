@@ -21,13 +21,29 @@ interface ActivityChartProps {
 // Custom tooltips
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
+    const value = payload[0].value;
+    
+    // Dynamic creative text based on activity
+    let subtitle = "";
+    if (value === 0) subtitle = "Complete silence.";
+    else if (value === 1) subtitle = "1 project got some love today.";
+    else if (value < 4) subtitle = `${value} repos pushed forward.`;
+    else subtitle = `${value} repos on fire! 🔥`;
+
     return (
-      <div className="bg-surface border border-border px-4 py-3 rounded-xl shadow-xl backdrop-blur-md">
-        <p className="text-sm text-muted-foreground mb-1">{label}</p>
+      <div className="bg-[#1a1f2e]/95 border border-border/80 px-4 py-3 rounded-xl shadow-2xl shadow-black/50 backdrop-blur-md relative transform -translate-y-2">
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-primary/5 rounded-xl pointer-events-none" />
+        
+        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1.5 flex items-center justify-between gap-4">
+          <span>{label}</span>
+          <Activity className="w-3 h-3 text-primary/70" />
+        </p>
+        
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-accent" />
-          <span className="font-semibold text-foreground">
-            {payload[0].value} {payload[0].value === 1 ? "repo" : "repos"} updated
+          <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(79,70,229,0.8)] animate-pulse" />
+          <span className="font-bold text-sm text-foreground">
+            {subtitle}
           </span>
         </div>
       </div>

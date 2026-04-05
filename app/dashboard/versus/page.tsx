@@ -9,6 +9,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useGlobalState } from "@/components/GlobalStateProvider";
+import { Sparkles, Crown } from "lucide-react";
+import VersusLanguageChart from "@/components/VersusLanguageChart";
+import { VersusMatchup } from "@/lib/ai";
 
 interface VersusData {
   user: any;
@@ -44,16 +47,18 @@ const UserCard = ({ data, loading, search, setSearch, onSearch, recentSearches }
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <Card className="flex-1 bg-white border-border shadow-sm overflow-visible min-h-[500px]">
+    <Card className="flex-1 bg-surface/50 backdrop-blur-sm border-border shadow-sm overflow-visible min-h-[500px]">
       <CardHeader className="p-6 border-b bg-secondary/30 relative z-20">
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input 
               placeholder="GitHub Username" 
-              className="pl-10 h-10 bg-white"
+              className="pl-10 h-10 bg-transparent"
               value={search}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
+              autoComplete="off"
+              spellCheck={false}
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 if (e.key === "Enter") {
                   onSearch(search);
@@ -65,7 +70,7 @@ const UserCard = ({ data, loading, search, setSearch, onSearch, recentSearches }
               onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
             />
             {showDropdown && recentSearches.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-border rounded-xl shadow-xl z-50 overflow-hidden text-left animate-in fade-in slide-in-from-top-2">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-surface/95 backdrop-blur-md border border-border rounded-xl shadow-xl z-50 overflow-hidden text-left animate-in fade-in slide-in-from-top-2">
                 <div className="px-3 py-2 text-[10px] font-bold text-muted-foreground uppercase tracking-widest bg-secondary/20 border-b border-border/50">
                   Recent 5 Searches
                 </div>
@@ -78,9 +83,10 @@ const UserCard = ({ data, loading, search, setSearch, onSearch, recentSearches }
                         setShowDropdown(false);
                         onSearch(name);
                       }}
-                      className="px-3 py-2.5 text-sm hover:bg-secondary/60 hover:text-blue-600 cursor-pointer flex items-center transition-colors"
+                      className="px-4 py-3 text-sm hover:bg-accent/10 hover:text-accent cursor-pointer flex items-center transition-colors"
                     >
-                      <span className="font-medium">{name}</span>
+                      <Search className="w-4 h-4 mr-3 text-muted-foreground transition-colors" />
+                      <span className="font-semibold text-foreground">{name}</span>
                     </div>
                   ))}
                 </div>
@@ -144,7 +150,32 @@ export default function VersusPage() {
   const [loading1, setLoading1] = useState(false);
   const [loading2, setLoading2] = useState(false);
   
+  const [matchupData, setMatchupData] = useState<VersusMatchup | null>(null);
+  const [matchupLoading, setMatchupLoading] = useState(false);
+  const [lastMatchupPair, setLastMatchupPair] = useState("");
+
   const { addSearch, recentSearches } = useRecentSearches("versus");
+
+  useEffect(() => {
+    if (data1?.user?.login && data2?.user?.login) {
+      const pair = `${data1.user.login}-${data2.user.login}`;
+      if (lastMatchupPair !== pair) {
+        setLastMatchupPair(pair);
+        setMatchupData(null);
+        setMatchupLoading(true);
+        fetch(`/api/analyze-versus?user1=${data1.user.login}&user2=${data2.user.login}`)
+          .then(res => res.json())
+          .then(data => {
+            if (data.matchup) setMatchupData(data.matchup);
+          })
+          .catch(err => console.error("Matchup error", err))
+          .finally(() => setMatchupLoading(false));
+      }
+    } else {
+      setMatchupData(null);
+      setLastMatchupPair("");
+    }
+  }, [data1?.user?.login, data2?.user?.login, lastMatchupPair]);
 
   const fetchUser = async (username: string, setFn: (d: any) => void, setLoading: (l: boolean) => void) => {
     if (!username) return;
@@ -163,6 +194,36 @@ export default function VersusPage() {
       setLoading(false);
     }
   };
+
+  const [hasAutoFetched, setHasAutoFetched] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !hasAutoFetched) {
+      const params = new URLSearchParams(window.location.search);
+      const autoUser1 = params.get("user1");
+      const autoUser2 = params.get("user2");
+
+      if (autoUser1 && autoUser2) {
+        setHasAutoFetched(true);
+        setUser1Search(autoUser1);
+        setUser2Search(autoUser2);
+        
+        // Force clear any old cached analytics completely
+        setData1(null);
+        setData2(null);
+        
+        // Automatically fetch the new matchup
+        fetchUser(autoUser1, setData1, setLoading1);
+        fetchUser(autoUser2, setData2, setLoading2);
+        
+        // Strip the URL parameters to prevent an infinite auto-fetch loop on reload
+        window.history.replaceState({}, '', '/dashboard/versus');
+      } else {
+        setHasAutoFetched(true);
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasAutoFetched]);
 
   const handleVersusSearch = () => {
     if (user1Search) {
@@ -223,7 +284,7 @@ export default function VersusPage() {
         </div>
 
         {data1?.user && data2?.user && data1?.stats && data2?.stats && (
-          <Card className="bg-white border-border shadow-sm animate-fade-in relative z-0">
+          <Card className="bg-surface/50 backdrop-blur-sm border-border shadow-sm animate-fade-in relative z-0">
             <CardHeader className="p-6 border-b text-center">
               <CardTitle className="text-sm font-bold uppercase tracking-[0.2em] text-primary">Battle Analysis</CardTitle>
             </CardHeader>
@@ -234,6 +295,50 @@ export default function VersusPage() {
                 <StatRow label="Followers" val1={data1.user.followers} val2={data2.user.followers} data1={data1} data2={data2} />
                 <StatRow label="Public Repositories" val1={data1.user.public_repos} val2={data2.user.public_repos} data1={data1} data2={data2} />
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {data1?.user && data2?.user && data1?.languages && data2?.languages && (
+           <VersusLanguageChart 
+              user1Name={data1.user.login} 
+              user2Name={data2.user.login} 
+              languages1={data1.languages} 
+              languages2={data2.languages} 
+           />
+        )}
+
+        {/* AI Matchup Section */}
+        {data1?.user && data2?.user && (
+          <Card className="bg-surface/50 backdrop-blur-sm border-border shadow-sm mt-8 animate-fade-in relative z-0 overflow-hidden">
+            <CardHeader className="p-6 border-b bg-slate-900 text-white text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-blue-500/10 mix-blend-overlay"></div>
+              <CardTitle className="text-sm font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+                <Sparkles className="w-4 h-4 text-blue-400" /> AI Judge Matchup
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              {matchupLoading ? (
+                <div className="flex flex-col items-center justify-center gap-4 animate-pulse py-8">
+                  <div className="w-12 h-12 rounded-full bg-muted" />
+                  <div className="h-6 w-48 bg-muted rounded" />
+                  <div className="h-4 w-64 bg-muted rounded" />
+                </div>
+              ) : matchupData ? (
+                <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider mb-6 border border-blue-200 shadow-sm">
+                    <Crown className="w-4 h-4" /> Winner: {matchupData.winner}
+                  </div>
+                  <h3 className="text-2xl font-black text-foreground mb-4">{matchupData.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed mb-6 font-medium">
+                    {matchupData.analysis}
+                  </p>
+                  <div className="p-4 bg-secondary/30 rounded-xl border border-border">
+                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Final Verdict</div>
+                    <div className="font-bold text-foreground">{matchupData.verdict}</div>
+                  </div>
+                </div>
+              ) : null}
             </CardContent>
           </Card>
         )}

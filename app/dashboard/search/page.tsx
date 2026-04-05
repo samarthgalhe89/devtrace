@@ -7,13 +7,17 @@ import LanguageChart from "@/components/LanguageChart";
 import RepoHealthTable from "@/components/RepoHealthTable";
 import ActivityChart from "@/components/ActivityChart";
 import DeveloperDNAComponent from "@/components/DeveloperDNA";
-import { GitHubUser, GitHubRepo } from "@/lib/github";
+import CityscapeHeatmap from "@/components/CityscapeHeatmap";
+import HolographicStats from "@/components/HolographicStats";
+import CollaborationStats from "@/components/CollaborationStats";
+import { GitHubUser, GitHubRepo, CollaborationStatsData } from "@/lib/github";
 import { RepoStats, LanguageStat } from "@/lib/analytics";
 import { RepoHealth } from "@/lib/scoring";
 import { ActivityTimelinePoint } from "@/lib/activity";
 import { Search } from "lucide-react";
 import { useRecentSearches } from "@/hooks/useRecentSearches";
 import { useGlobalState } from "@/components/GlobalStateProvider";
+import { evaluateBadges } from "@/lib/badges";
 
 interface DashboardData {
   user: GitHubUser;
@@ -22,6 +26,8 @@ interface DashboardData {
   languages: LanguageStat[];
   healthScores: RepoHealth[];
   activity: ActivityTimelinePoint[];
+  contributions?: any;
+  collaboration?: CollaborationStatsData;
 }
 
 export default function SearchPage() {
@@ -99,6 +105,8 @@ export default function SearchPage() {
               onFocus={() => setShowDropdown(true)}
               onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
               className="block w-full pl-12 pr-32 py-4 text-lg bg-surface/50 backdrop-blur-sm border border-border shadow-sm rounded-2xl text-foreground placeholder-muted-foreground focus:ring-2 focus:ring-accent/50 focus:border-accent outline-none transition-all relative z-10"
+              autoComplete="off"
+              spellCheck={false}
             />
             <div className="absolute inset-y-2 right-2 flex items-center z-10">
               <button 
@@ -127,8 +135,8 @@ export default function SearchPage() {
                       }}
                       className="px-5 py-3.5 text-base hover:bg-accent/10 hover:text-accent cursor-pointer flex items-center transition-colors"
                     >
-                      <Search className="w-4 h-4 mr-3 opacity-50" />
-                      <span className="font-semibold">{name}</span>
+                      <Search className="w-4 h-4 mr-3 text-muted-foreground transition-colors" />
+                      <span className="font-semibold text-foreground">{name}</span>
                     </div>
                   ))}
                 </div>
@@ -176,7 +184,10 @@ export default function SearchPage() {
           <div className="flex flex-col gap-8 animate-fade-in relative z-0">
             
             {/* Top Banner: Profile */}
-            <ProfileCard user={data.user} />
+            <ProfileCard 
+              user={data.user} 
+              badges={evaluateBadges(data.user, data.stats, data.languages, data.activity)} 
+            />
             
             {/* Phase 3: Repo Stats Cards */}
             <RepoStatsCards stats={data.stats} />
@@ -190,8 +201,23 @@ export default function SearchPage() {
               <LanguageChart data={data.languages} />
             </div>
 
+            {/* Phase 4: 3D Cityscape Heatmap & Holographic Stats */}
+            {data.contributions && (
+              <div className="w-full">
+                <HolographicStats data={data.contributions} />
+                <CityscapeHeatmap data={data.contributions} />
+              </div>
+            )}
+
+            {/* Phase 6: Collaboration Stats */}
+            {data.collaboration && (
+              <div className="w-full mt-2">
+                <CollaborationStats data={data.collaboration} />
+              </div>
+            )}
+
             {/* AI Insights Banner */}
-            <div className="w-full">
+            <div className="w-full mt-4">
               {/* Phase 5: AI Insights */}
               <DeveloperDNAComponent username={data.user.login} />
             </div>

@@ -127,3 +127,139 @@ export async function fetchRepoLanguages(
   if (!res.ok) return {};
   return res.json();
 }
+
+/**
+ * Fetch GitHub user contributions via GraphQL
+ */
+export interface ContributionDay {
+  contributionCount: number;
+  date: string;
+}
+
+export interface ContributionData {
+  totalContributions: number;
+  days: ContributionDay[];
+}
+
+export async function fetchContributions(
+  username: string,
+  token?: string
+): Promise<ContributionData | null> {
+  if (!token) return null; // GraphQL requires token
+
+  const query = `
+    query($userName:String!) { 
+      user(login: $userName){
+        contributionsCollection {
+          contributionCalendar {
+            totalContributions
+            weeks {
+              contributionDays {
+                contributionCount
+                date
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const res = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: { userName: username },
+      }),
+      next: { revalidate: 300 },
+    });
+
+    if (!res.ok) {
+      console.warn("GraphQL error:", res.status);
+      return null;
+    }
+
+    const { data, errors } = await res.json();
+    
+    if (errors || !data?.user) {
+      console.warn("GraphQL response errors:", errors);
+      return null;
+    }
+
+    const calendar = data.user.contributionsCollection.contributionCalendar;
+    const days: ContributionDay[] = [];
+    calendar.weeks.forEach((week: any) => {
+      week.contributionDays.forEach((day: any) => {
+        days.push({
+          contributionCount: day.contributionCount,
+          date: day.date,
+        });
+      });
+    });
+
+    return {
+      totalContributions: calendar.totalContributions,
+      days,
+    };
+  } catch (error) {
+    console.error("Error fetching contributions:", error);
+    return null;
+  }
+}
+
+/**
+ * Fetch Collaboration stats (PRs and Issues) via GraphQL
+ */
+export interface CollaborationStatsData {
+  totalPullRequests: number;
+  totalIssues: number;
+}
+
+export async function fetchCollaborationStats(
+  username: string,
+  token?: string
+): Promise<CollaborationStatsData | null> {
+  if (!token) return null;
+
+  const query = `
+    query($userName:String!) {
+      user(login: $userName) {
+        pullRequests { totalCount }
+        issues { totalCount }
+      }
+    }
+  `;
+
+  try {
+    const res = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        variables: { userName: username },
+      }),
+      next: { revalidate: 300 },
+    });
+
+    if (!res.ok) return null;
+
+    const { data, errors } = await res.json();
+    if (errors || !data?.user) return null;
+
+    return {
+      totalPullRequests: data.user.pullRequests.totalCount,
+      totalIssues: data.user.issues.totalCount,
+    };
+  } catch (error) {
+    console.error("Error fetching collaboration stats:", error);
+    return null;
+  }
+}
