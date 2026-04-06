@@ -57,7 +57,7 @@ export default function HomePage() {
           <div className="w-8 h-8 flex items-center justify-center shrink-0 translate-y-[1px]">
             <img src="/logo.svg" alt="Logo" width={32} height={32} className="w-full h-full object-contain" />
           </div>
-          <span className="text-sm font-semibold tracking-tight text-foreground/90">DevDNA</span>
+          <span className="text-sm font-semibold tracking-tight text-foreground/90">Glyph</span>
         </div>
       </header>
 
@@ -72,12 +72,12 @@ export default function HomePage() {
 
         {/* Title */}
         <h1 className="animate-fade-in animate-fade-in-delay-1 text-center font-bold tracking-tight mb-6" style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", lineHeight: 1.1 }}>
-          Your GitHub profile&apos;s health<br />report, in one dashboard
+          Decode your developer DNA.
         </h1>
 
         {/* Subtitle */}
         <p className="animate-fade-in animate-fade-in-delay-2 text-muted-foreground text-center max-w-2xl text-base md:text-lg mb-10 leading-relaxed">
-          DevDNA analyzes developer profiles for language distribution, repository health, code consistency, and AI-powered archetype profiling — scored 0 to 100.
+          Translating raw GitHub data into a visual exploration of your coding habits, repository health, and engineering identity.
         </p>
 
         {/* Buttons Row */}
@@ -102,14 +102,14 @@ export default function HomePage() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
                 <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
               </div>
-              <span className="text-xs text-muted-foreground font-mono ml-2">devdna — analyze</span>
+              <span className="text-xs text-muted-foreground font-mono ml-2">glyph — analyze</span>
             </div>
             {/* Terminal Body */}
             <div className="p-6 font-mono text-sm text-[#cccccc] flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-green-400">➜</span>
                 <span className="text-blue-400">~</span>
-                <span className="text-white">npx devdna analyze torvalds</span>
+                <span className="text-white">npx glyph analyze torvalds</span>
               </div>
               <div className="text-muted-foreground mb-4">Fetching public repositories... [OK]</div>
               <div className="text-muted-foreground mb-2">Analyzing 45 repositories...</div>

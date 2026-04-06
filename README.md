@@ -1,6 +1,6 @@
-# 🧠 GitHub Intelligence Dashboard
+# 🧠 Glyph
 
-> **A personal developer analytics platform** — visualize your GitHub presence, decode your coding DNA, and surface AI-powered insights about your engineering journey.
+> **Decode your developer DNA** — Translating raw GitHub data into a visual exploration of your coding habits, repository health, and engineering identity.
 
 ---
 

@@ -91,7 +91,7 @@ export default function Sidebar() {
           <div className="w-10 h-10 flex items-center justify-center shrink-0">
             <img
               src="/logo.svg"
-              alt="DevDNA Logo"
+              alt="Glyph Logo"
               width={40}
               height={40}
               className="w-full h-full object-contain"
@@ -99,10 +99,10 @@ export default function Sidebar() {
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-black gradient-text leading-none tracking-tight">
-              DevDNA
+              Glyph
             </span>
             <span className="text-[9px] uppercase tracking-widest text-muted-foreground/70 font-bold mt-1">
-              GitHub Intelligence
+              Developer DNA
             </span>
           </div>
         </Link>
