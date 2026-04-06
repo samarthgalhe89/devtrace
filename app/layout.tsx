@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   keywords: ["github", "analytics", "dashboard", "developer", "insights"],
   icons: {
     icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/logo.svg", type: "image/svg+xml" },
     ],
-    shortcut: "/favicon.svg",
+    shortcut: "/logo.svg",
   },
 };
 

@@ -9,24 +9,24 @@ import { Button } from "@/components/ui/button";
 
 const features = [
   {
-    icon: <BarChart3 className="w-6 h-6 text-accent" />,
-    title: "Profile Analytics",
-    description: "Deep dive into any developer's GitHub presence and activity.",
-  },
-  {
     icon: <Dna className="w-6 h-6 text-accent" />,
-    title: "Developer DNA",
-    description: "Discover developer type, consistency, and tech diversity.",
+    title: "AI DNA Profiling",
+    description: "Categorizes developers into technical archetypes based on commit frequency, language distribution, and pattern consistency.",
   },
   {
-    icon: <HeartPulse className="w-6 h-6 text-accent" />,
-    title: "Repo Health Score",
-    description: "Score each repository based on stars, forks, and activity.",
+    icon: <BarChart3 className="w-6 h-6 text-accent" />,
+    title: "Repository Auditing",
+    description: "Evaluates project health using weighted metrics for engagement, activity recency, and codebase entropy.",
+  },
+  {
+    icon: <Github className="w-6 h-6 text-accent" />,
+    title: "Versus Mode",
+    description: "Direct side-by-side comparison of two developers' contribution velocity, impact, and technical breadth.",
   },
   {
     icon: <Bot className="w-6 h-6 text-accent" />,
-    title: "AI Insights",
-    description: "Get AI-generated analysis of any developer's profile.",
+    title: "Engineering Labs",
+    description: "Access specialized modules like the Code Graveyard for legacy projects and the Stress Map for workload analysis.",
   },
 ];
 
@@ -46,38 +46,36 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-background flex flex-col font-sans text-foreground selection:bg-accent/20 pb-20">
+    <main className="min-h-screen bg-background flex flex-col font-sans text-foreground selection:bg-accent/20 pb-24 overflow-x-hidden">
       
-      {/* Subtle background glow mimicking the reference */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-[400px] bg-accent-glow rounded-full blur-[120px] opacity-30 pointer-events-none" />
+      {/* Subtle background glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[600px] bg-accent-glow rounded-full blur-[140px] opacity-20 pointer-events-none" />
 
-      {/* Top Navigation */}
-      <header className="flex items-center px-6 py-4 relative z-20">
-        <div className="flex items-center gap-1.5">
-          <div className="w-8 h-8 flex items-center justify-center shrink-0 translate-y-[1px]">
-            <img src="/logo.svg" alt="Logo" width={32} height={32} className="w-full h-full object-contain" />
-          </div>
-          <span className="text-sm font-semibold tracking-tight text-foreground/90">DevTrace</span>
-        </div>
-      </header>
-
-      {/* Hero Container - Takes up minimum of one screen height */}
-      <div className="flex flex-col items-center justify-center px-4 relative z-10 min-h-[85vh]">
+      {/* Hero Container */}
+      <div className="flex flex-col items-center justify-center px-4 relative z-10 pt-24 pb-24">
         
+        {/* Highlighted App Name */}
+        <div className="animate-fade-in flex flex-col items-center gap-4 mb-10">
+          <div className="w-16 h-16 flex items-center justify-center">
+            <img src="/logo.svg" alt="Logo" width={64} height={64} className="w-full h-full object-contain" />
+          </div>
+          <span className="text-3xl font-black tracking-tight text-foreground gradient-text">DevTrace</span>
+        </div>
+
         {/* Badge */}
         <div className="animate-fade-in inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-surface/50 backdrop-blur-sm text-xs text-muted-foreground transition-colors cursor-default mb-8">
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-          v1.0 - Open Source Intelligence <ChevronRight className="w-3 h-3" />
+          v1.0 - GitHub Intelligence <ChevronRight className="w-3 h-3" />
         </div>
 
         {/* Title */}
-        <h1 className="animate-fade-in animate-fade-in-delay-1 text-center font-bold tracking-tight mb-6" style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)", lineHeight: 1.1 }}>
-          Trace your developer journey.
+        <h1 className="animate-fade-in animate-fade-in-delay-1 text-center font-black tracking-tighter mb-8 px-4" style={{ fontSize: "clamp(1.8rem, 5vw, 3.8rem)", lineHeight: 1.1 }}>
+          Trace your <span className="gradient-text">developer DNA.</span>
         </h1>
 
         {/* Subtitle */}
-        <p className="animate-fade-in animate-fade-in-delay-2 text-muted-foreground text-center max-w-2xl text-base md:text-lg mb-10 leading-relaxed">
-          Translating raw GitHub data into a visual exploration of your coding footprint, repository health, and engineering legacy.
+        <p className="animate-fade-in animate-fade-in-delay-2 text-muted-foreground text-center max-w-2xl text-base md:text-lg mb-10 leading-relaxed opacity-90">
+          Advanced GitHub analytics and engineering intelligence. Audit repository health, discover developer archetypes, and visualize your coding journey.
         </p>
 
         {/* Buttons Row */}
@@ -93,61 +91,76 @@ export default function HomePage() {
         </div>
 
         {/* Terminal Mockup Footer */}
-        <div className="animate-fade-in animate-fade-in-delay-4 w-full max-w-4xl mx-auto flex-shrink-0 shadow-[0_0_50px_-12px_rgba(88,166,255,0.1)]">
-          <div className="w-full bg-[#1e1e1e] border border-border/80 rounded-xl relative overflow-hidden flex flex-col">
+        <div className="animate-fade-in animate-fade-in-delay-4 w-full max-w-4xl mx-auto px-4">
+          <div className="w-full bg-[#0d1117] border border-border/80 rounded-2xl relative overflow-hidden flex flex-col shadow-[0_30px_70px_-20px_rgba(0,0,0,0.8),0_0_20px_rgba(88,166,255,0.05)]">
             {/* Terminal Header */}
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-[#252526]">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
-                <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/5 bg-white/[0.02]">
+              <div className="flex gap-2.5">
+                <div className="w-3 h-3 rounded-full bg-[#ff5f56]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#ffbd2e]"></div>
+                <div className="w-3 h-3 rounded-full bg-[#27c93f]"></div>
               </div>
-              <span className="text-xs text-muted-foreground font-mono ml-2">devtrace — analyze</span>
+              <div className="flex items-center gap-2 text-[10px] font-mono text-muted-foreground/80 tracking-widest uppercase">
+                <span className="w-1 h-1 rounded-full bg-green-500/50 animate-pulse" />
+                bash — devtrace — 80x24
+              </div>
             </div>
             {/* Terminal Body */}
-            <div className="p-6 font-mono text-sm text-[#cccccc] flex-1">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-green-400">➜</span>
-                <span className="text-blue-400">~</span>
-                <span className="text-white">npx devtrace analyze torvalds</span>
+            <div className="p-8 font-mono text-[13px] leading-relaxed text-[#c9d1d9] flex-1 min-h-[220px]">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-[#58a6ff] font-bold">➜</span>
+                <span className="text-[#79c0ff]">~</span>
+                <span className="text-white">npx devtrace <span className="text-[#ff7b72]">analyze</span> torvalds</span>
               </div>
-              <div className="text-muted-foreground mb-4">Fetching public repositories... [OK]</div>
-              <div className="text-muted-foreground mb-2">Analyzing 45 repositories...</div>
-              <div className="flex gap-4 mb-2">
-                <span className="text-purple-400">⚡ Developer DNA:</span>
-                <span className="text-white">The Systems Architect</span>
+              <div className="text-muted-foreground/80 mb-6 flex flex-col gap-1 pl-6 border-l border-white/5">
+                <div>[SYSTEM] Fetching public repositories... <span className="text-green-400">[0.42s]</span></div>
+                <div>[SYSTEM] Analyzing coding patterns & activity... <span className="text-green-400">[OK]</span></div>
+                <div>[SYSTEM] Building developer profile...</div>
               </div>
-              <div className="flex gap-4">
-                <span className="text-yellow-400">✦ Overall Health:</span>
-                <span className="text-white">98 / 100 (A+)</span>
+              
+              <div className="space-y-3 pt-2">
+                <div className="flex items-center gap-4">
+                  <span className="px-1.5 py-0.5 rounded-sm bg-purple-500/10 text-purple-400 text-[10px] font-bold border border-purple-500/20">TYPE</span>
+                  <span className="text-[#c9d1d9]">DEV TYPE: <span className="text-[#d2a8ff] font-bold">SYSTEMS ARCHITECT</span></span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="px-1.5 py-0.5 rounded-sm bg-yellow-500/10 text-yellow-400 text-[10px] font-bold border border-yellow-500/20">HP</span>
+                  <span className="text-[#c9d1d9]">OVERALL HEALTH: <span className="text-yellow-400 font-bold">98 / 100 [A+]</span></span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Feature cards below the fold */}
-      <div className="animate-fade-in animate-fade-in-delay-4 relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-20 max-w-5xl mx-auto w-full px-4">
-        {features.map((f) => (
-          <Card
-            key={f.title}
-            className="flex flex-col items-start gap-4 hover:-translate-y-1 transition-transform border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50"
-          >
-            <CardContent className="p-6">
-              <div className="p-3 rounded-lg bg-surface border border-border inline-block mb-4">
-                {f.icon}
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-foreground mb-1">
-                  {f.title}
-                </h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
+      {/* Feature grid */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-16 border-t border-border/50">
+        <div className="text-center mb-16 space-y-4">
+          <h4 className="text-[10px] font-black text-accent tracking-[0.4em] uppercase">Modules</h4>
+          <h2 className="text-3xl font-bold tracking-tight">Core Capabilities</h2>
+          <p className="text-sm text-muted-foreground max-w-xl mx-auto opacity-70">
+            A precision-engineered toolset designed to decode developer behavior and repository health using high-frequency GitHub data.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((f, i) => (
+            <Card
+              key={f.title}
+              className={`animate-fade-in animate-fade-in-delay-${i+1} border-border/50 bg-surface/30 backdrop-blur-sm hover:bg-surface/50 transition-all hover:-translate-y-1 group`}
+            >
+              <CardContent className="p-8">
+                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-accent/20 transition-all">
+                  {f.icon}
+                </div>
+                <h3 className="text-base font-bold text-foreground mb-3">{f.title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed opacity-80">
                   {f.description}
                 </p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
       
     </main>
