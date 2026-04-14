@@ -35,8 +35,8 @@ export default function ProfileCard({ user, badges }: ProfileCardProps) {
 
   return (
     <Card id="profile-card" className="w-full animate-fade-in border-border/50 bg-background/50 backdrop-blur supports-[backdrop-filter]:bg-background/50">
-      <CardContent className="p-6 lg:p-8">
-        <div className="flex flex-col lg:flex-row items-center lg:items-center justify-between gap-8">
+      <CardContent className="p-6 xl:p-8">
+        <div className="flex flex-col xl:flex-row items-center xl:items-center justify-between gap-8">
           
           {/* Left Side: Avatar + Info */}
           <div className="flex flex-col sm:flex-row items-center sm:items-center gap-6 flex-1 text-center sm:text-left min-w-0 w-full">
@@ -63,7 +63,7 @@ export default function ProfileCard({ user, badges }: ProfileCardProps) {
 
             {/* Info */}
             <div className="flex-1 min-w-0 w-full">
-              <h2 className="text-2xl font-bold text-foreground break-words">
+              <h2 className="text-2xl font-bold text-foreground">
                 {user.name || user.login}
               </h2>
               <a
@@ -79,7 +79,7 @@ export default function ProfileCard({ user, badges }: ProfileCardProps) {
               </a>
 
               {user.bio && (
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-lg mx-auto sm:mx-0 break-words">
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed max-w-lg mx-auto sm:mx-0">
                   {user.bio}
                 </p>
               )}
@@ -113,8 +113,8 @@ export default function ProfileCard({ user, badges }: ProfileCardProps) {
           </div>
 
           {/* Right Side: Stats bar + Share */}
-          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 sm:gap-6 lg:gap-10 pt-6 lg:pt-0 border-t lg:border-t-0 lg:border-l border-border lg:pl-10 w-full lg:w-auto justify-center sm:justify-start">
-            <div className="flex flex-wrap items-center justify-center gap-6 lg:gap-10">
+          <div className="flex flex-col sm:flex-row flex-wrap items-center gap-4 sm:gap-6 xl:gap-10 pt-6 xl:pt-0 border-t xl:border-t-0 xl:border-l border-border xl:pl-10 w-full xl:w-auto justify-center sm:justify-start">
+            <div className="flex flex-wrap items-center justify-center gap-6 xl:gap-10">
               {stats.map((s) => (
                 <div
                   key={s.label}
