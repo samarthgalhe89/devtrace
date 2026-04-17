@@ -10,7 +10,7 @@ export default function BadgesDisplay({ badges }: { badges: Badge[] }) {
       {earnedBadges.map(badge => (
         <div 
           key={badge.id} 
-          className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/50 text-xs font-bold shadow-sm ${badge.color} hover:scale-105 transition-all cursor-help bg-secondary/80 backdrop-blur-sm`} 
+          className={`group relative flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/50 text-xs font-bold shadow-sm ${badge.color} hover:scale-105 transition-all cursor-default bg-secondary/80 backdrop-blur-sm`} 
         >
           <span>{badge.icon}</span>
           <span>{badge.name}</span>

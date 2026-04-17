@@ -251,8 +251,8 @@ export default function StressPage() {
             <h1 className="text-3xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
               <Activity className="w-8 h-8 text-red-400" /> Commit Sentiment Analysis
             </h1>
-            <p className="text-muted-foreground font-medium">
-              Friction patterns derived from commit message sentiment across your repositories.
+            <p className="text-muted-foreground font-medium text-sm mt-1">
+              Scans your commit messages using AI to detect frustration, revealing which languages and days cause you the most stress.
             </p>
           </div>
         </header>

@@ -1,6 +1,5 @@
 import { GitHubUser } from "@/lib/github";
-import { FolderGit2, Users, UserCheck, MapPin, Building2, CalendarDays, ExternalLink, Share, Download } from "lucide-react";
-import { exportAsImage } from "@/lib/exportImage";
+import { FolderGit2, Users, UserCheck, MapPin, Building2, CalendarDays, ExternalLink, Share } from "lucide-react";
 import { toast } from "sonner"; // Assuming sonner is used for toasts, otherwise I'll use a fallback
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -62,7 +61,7 @@ export default function ProfileCard({ user, badges }: ProfileCardProps) {
             </a>
 
             {/* Info */}
-            <div className="flex-1 min-w-0 w-full">
+            <div className="flex-1 min-w-0 w-full relative z-30">
               <h2 className="text-2xl font-bold text-foreground">
                 {user.name || user.login}
               </h2>
@@ -134,13 +133,6 @@ export default function ProfileCard({ user, badges }: ProfileCardProps) {
             <div className="h-10 w-px bg-border hidden sm:block mx-2" />
             
             <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-              <button
-                onClick={() => exportAsImage("profile-card", `${user.login}-profile`)}
-                className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-secondary/80 text-foreground hover:bg-secondary text-sm font-bold shadow-sm hover:scale-105 active:scale-95 transition-all outline outline-1 outline-border w-full sm:w-auto"
-              >
-                <Download className="w-4 h-4" />
-                Download
-              </button>
               <button
                 onClick={handleShare}
                 className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all w-full sm:w-auto"

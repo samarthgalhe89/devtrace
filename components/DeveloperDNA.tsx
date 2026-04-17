@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DeveloperDNA } from "@/lib/ai";
-import { Sparkles, CheckCircle2, TrendingUp, Bot, Brain, Rocket, Download } from "lucide-react";
-import { exportAsImage } from "@/lib/exportImage";
+import { Sparkles, CheckCircle2, TrendingUp, Bot, Brain, Rocket } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -104,14 +103,6 @@ export default function DeveloperDNAComponent({ username }: DeveloperDNAProps) {
   return (
     <Card id="developer-dna-card" className="p-0 overflow-hidden relative group animate-fade-in w-full border-border bg-card shadow-sm">
       <CardContent className="relative z-10 p-6 lg:p-10">
-        {/* Export Button */}
-        <button
-          onClick={() => exportAsImage("developer-dna-card", `${username || 'my'}-developer-dna`)}
-          className="absolute top-6 right-6 lg:top-10 lg:right-10 flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/80 text-foreground hover:bg-secondary text-xs font-bold transition-colors z-50 border border-border/50 shadow-sm"
-        >
-          <Download className="w-3.5 h-3.5" />
-          Export DNA
-        </button>
         <div className="flex flex-col gap-10">
           
           {/* Top Section: Archetype & Summary */}

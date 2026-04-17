@@ -129,8 +129,8 @@ export default function NemesisPage() {
             <h1 className="text-3xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
               <Target className="w-8 h-8 text-red-400" /> Arch-Nemesis
             </h1>
-            <p className="text-muted-foreground font-medium">
-              Your algorithmic coding rival has been identified.
+            <p className="text-muted-foreground font-medium text-sm mt-1">
+              Analyzes your GitHub data to find another developer with a nearly identical tech stack and coding habits.
             </p>
           </div>
         </header>

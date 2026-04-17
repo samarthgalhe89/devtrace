@@ -147,8 +147,8 @@ export default function GraveyardPage() {
             <h1 className="text-3xl font-extrabold text-foreground tracking-tight flex items-center gap-3">
               <Skull className="w-8 h-8 text-red-400" /> Code Graveyard
             </h1>
-            <p className="text-muted-foreground font-medium">
-              Where abandoned projects rest in peace. Or not.
+            <p className="text-muted-foreground font-medium text-sm mt-1">
+              Tracks your GitHub repositories and categorizes them to show which projects you've abandoned and which are still active.
             </p>
           </div>
         </header>
